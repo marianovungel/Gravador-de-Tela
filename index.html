@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>--Mariano Vungel--</title>
+
+    <style>
+        body{
+            display: flex;
+            justify-content: center;
+            background-color: rgb(0, 238, 255);
+        }
+        .video{
+            margin: 100px auto 0px auto;
+        }
+    </style>
+</head>
+<body>
+    <video class="video" src="" width="700" height="400" controls></video>
+    <script>
+
+        const start = async ()=>{
+
+            const stream = await navigator.mediaDevices.getDisplayMedia(
+                { video:{
+                    mediaSource:"screen",
+                },
+            })
+
+            const data = [];
+
+            const mediaRecorder = new MediaRecorder(stream);
+
+            mediaRecorder.ondataavailable = (e)=>{
+                data.push(e.data);
+            }
+
+            mediaRecorder.start();
+
+            mediaRecorder.onstop = (e)=>{
+                document.querySelector("video").src = URL.createObjectURL(
+                    new Blob(data, {
+                        type: data[0].type,
+                    })
+                )
+            }
+        }
+
+
+        start()
+
+
+
+    </script>
+</body>
+</html>
